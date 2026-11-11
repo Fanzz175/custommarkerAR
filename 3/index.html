@@ -3,23 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WebAR Hotel Scene</title>
+    <title>WebAR Custom Marker</title>
 
-    <!-- A-Frame & AR.js -->
+    <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+    <!-- AR.js Marker Tracking -->
     <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.7/aframe/build/aframe-ar.js"></script>
 
     <style>
-        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
-        .instruction {
-            position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
-            width: 90%; padding: 10px; color: white; background: rgba(0, 0, 0, 0.65);
-            border-radius: 8px; text-align: center; z-index: 10;
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
         }
+
+        .instruction {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            padding: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.65);
+            border-radius: 8px;
+            text-align: center;
+            z-index: 10;
+        }
+
         .loading {
-            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
-            padding: 8px 15px; color: white; background: rgba(0, 0, 0, 0.65);
-            border-radius: 6px; z-index: 10;
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 15px;
+            color: white;
+            background: rgba(0, 0, 0, 0.65);
+            border-radius: 6px;
+            z-index: 10;
         }
     </style>
 </head>
@@ -37,22 +59,44 @@
     <a-scene
         embedded
         vr-mode-ui="enabled: false"
-        renderer="logarithmicDepthBuffer: true; colorManagement: true; physicallyCorrectLights: true;"
-        arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;"
+        renderer="
+            logarithmicDepthBuffer: true;
+            colorManagement: true;
+            physicallyCorrectLights: true;
+        "
+        arjs="
+            sourceType: webcam;
+            trackingMethod: best;
+            debugUIEnabled: false;
+        "
     >
+
         <!-- Preload 3D Model -->
         <a-assets timeout="30000">
-            <a-asset-item id="blenderModel" src="./model.glb"></a-asset-item>
+            <a-asset-item
+                id="blenderModel"
+                src="./3dbuilding.glb">
+            </a-asset-item>
         </a-assets>
 
-        <!-- Lighting for PBR Materials -->
-        <a-light type="ambient" color="#FFFFFF" intensity="1.5"></a-light>
-        <a-light type="directional" color="#FFFFFF" intensity="2.0" position="5 10 7"></a-light>
+        <!-- Lighting -->
+        <a-light
+            type="ambient"
+            color="#FFFFFF"
+            intensity="1.5">
+        </a-light>
+
+        <a-light
+            type="directional"
+            color="#FFFFFF"
+            intensity="2.0"
+            position="5 10 7">
+        </a-light>
 
         <!-- Custom Pattern Marker -->
         <a-marker type="pattern" url="./pattern-OIP.patt">
 
-            <!-- Scaled down to fit table-top WebAR view -->
+            <!-- 3D Model scaled down for table-top view -->
             <a-entity
                 id="model"
                 gltf-model="#blenderModel"
@@ -64,7 +108,9 @@
 
         </a-marker>
 
+        <!-- AR camera -->
         <a-entity camera></a-entity>
+
     </a-scene>
 
     <script>
@@ -73,13 +119,14 @@
 
         model.addEventListener("model-loaded", function () {
             loadingMessage.textContent = "Model selesai dimuat. Imbas marker anda.";
+
             setTimeout(function () {
                 loadingMessage.style.display = "none";
             }, 3000);
         });
 
         model.addEventListener("model-error", function () {
-            loadingMessage.textContent = "Ralat: Fail model.glb tidak dapat dimuat.";
+            loadingMessage.textContent = "Ralat: Fail 3dbuilding.glb tidak dapat dimuat.";
         });
     </script>
 
